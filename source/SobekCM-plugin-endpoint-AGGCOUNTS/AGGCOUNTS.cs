@@ -252,7 +252,7 @@ namespace AGGCOUNTS
                 id = attrs["id"].Value;
                 type = attrs["type"].Value;
 
-                Response.Output.WriteLine("<result rownum=\"" + idx + "\" code=\"" + code + "\" name=\"" + SecurityElement.Escape(name) + "\" id=\"" + id + "\" type=\"" + type + "\" isActive=\"" + isActive + "\" isHidden=\"" + isHidden + "\" ");
+                Response.Output.Write("<result rownum=\"" + idx + "\" code=\"" + code + "\" name=\"" + SecurityElement.Escape(name) + "\" id=\"" + id + "\" type=\"" + type + "\" isActive=\"" + isActive + "\" isHidden=\"" + isHidden + "\" ");
                 
                 IEnumerable<DataRow> query =
                    from aggregation in aggregations.AsEnumerable()
@@ -285,26 +285,26 @@ namespace AGGCOUNTS
                         {
                             count = 32767;
                             errorcount++;
-                            Response.Output.WriteLine(" error" + errorcount + "=\"" + e.Message + " [" + SecurityElement.Escape(e.StackTrace) + "]\"");
+                            Response.Output.Write("error" + errorcount + "=\"" + e.Message + " [" + SecurityElement.Escape(e.StackTrace) + "]\" ");
                         }
 
                         if (mask==0)
                         {
-                            Response.Output.WriteLine(" count_public=\"" + count + "\" ");
+                            Response.Output.Write("count_public=\"" + count + "\" ");
                         }
                         else if (mask==-1)
                         {
-                            Response.Output.WriteLine(" count_private=\"" + count + "\" ");
+                            Response.Output.Write("count_private=\"" + count + "\" ");
                         }
                         else
                         {
-                            Response.Output.WriteLine(" count_mask" + Math.Abs(mask) + "=\"" + count + "\" ");
+                            Response.Output.Write("count_mask" + Math.Abs(mask) + "=\"" + count + "\" ");
                         }
                     }
                     catch (Exception e)
                     {
                         errorcount++;
-                        Response.Output.WriteLine(" error" + errorcount + "=\"mask or count retrieval issue - " + e.Message + " [" + SecurityElement.Escape(e.StackTrace ) + "]\"");
+                        Response.Output.Write(" error" + errorcount + "=\"mask or count retrieval issue - " + e.Message + " [" + SecurityElement.Escape(e.StackTrace ) + "]\" ");
                     }
                 }
 
@@ -317,7 +317,7 @@ namespace AGGCOUNTS
 
                 foreach (DataRow p in thisagg)
                 {
-                    Response.Output.WriteLine("count_dark=\"" + p["count"] + "\" ");
+                    Response.Output.Write("count_dark=\"" + p["count"] + "\" ");
                 }
 
                 try
@@ -342,23 +342,24 @@ namespace AGGCOUNTS
 
                         if (cids.Length>3)
                         {
-                            Response.Output.WriteLine("aliases=");
+                            Response.Output.Write("aliases=");
                         }
                         else
                         {
-                            Response.Output.WriteLine("alias=");
+                            Response.Output.Write("alias=");
                         }
 
-                        Response.Output.WriteLine("\"" + cids + "\" ");
+                        Response.Output.Write("\"" + cids + "\" ");
                     }
                     else
                     {
-                        Response.Output.WriteLine(" alias=\"NONE\" ");
+                        Response.Output.Write("alias=\"NONE\" ");
                     }
                 }
                 catch (Exception e)
                 {
-                    Response.Output.WriteLine("<!-- exception trying to get cids [" + e.Message + "] -->");
+                    errorcount++;
+                    Response.Output.Write("error" + errorcount + "=\"trying to get cids [" + e.Message + "]\" ");
                 }
 
                 try
@@ -382,18 +383,19 @@ namespace AGGCOUNTS
 
                     String indexedcount = solraggs[code];
 
-                    Response.Output.WriteLine(" indexed_count=\"" + indexedcount + "\" ");
+                    Response.Output.Write("count_indexed=\"" + indexedcount + "\" ");
                 }
                 catch (Exception e)
                 {
                     errorcount++;
-                    Response.Output.WriteLine(" indexed_count=\"0\"");
+                    Response.Output.Write("count_indexed=\"0\" ");
                 }
 
-                Response.Output.WriteLine(" />");
+                Response.Output.Write("/>\r\n");
             }
 
             Response.Output.WriteLine("</results>");
+
             ended = DateTimeToUnixTimestamp(DateTime.Now);
 
             Response.Output.WriteLine("<!-- generated in " + (ended - started) + " seconds. -->");
