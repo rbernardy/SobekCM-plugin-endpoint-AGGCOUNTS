@@ -17,3 +17,5 @@ lead developer). It provides a REST API endpoint to return a list of the aggrega
 <li>indexed_count</li>
 <li>alias</li>
 </ul>
+<hr/>
+<p>Richard Bernardy - <a href="mailto:rbernard@usf.edu">rbernard@usf.edu</a> - January 9, 2017</p>
