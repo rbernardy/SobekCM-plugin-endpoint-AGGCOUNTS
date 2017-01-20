@@ -19,3 +19,4 @@ lead developer). It provides a REST API endpoint to return a list of the aggrega
 </ul>
 <hr/>
 <p>Richard Bernardy - <a href="mailto:rbernard@usf.edu">rbernard@usf.edu</a> - January 9, 2017</p>
+<p>I'd appreciate a courtesy notification by email if you find this plugin useful and are using it in your SobekCM-based respository.</p>
